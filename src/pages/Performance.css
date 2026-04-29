@@ -1,0 +1,16 @@
+.performance-page{animation:fadeIn 0.4s ease-out}
+.rank-num{font-weight:700;color:#818cf8;font-size:0.85rem}
+.table-section{margin-top:1.5rem}
+.table-section h3{font-size:1.1rem;font-weight:700;margin-bottom:1rem}
+
+/* Level Badges */
+.level-badge{padding:4px 12px;border-radius:8px;font-size:0.78rem;font-weight:600;white-space:nowrap}
+.level-excellent{background:rgba(16,185,129,0.12);color:#34d399;border:1px solid rgba(16,185,129,0.2)}
+.level-good{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.2)}
+.level-average{background:rgba(245,158,11,0.12);color:#fbbf24;border:1px solid rgba(245,158,11,0.2)}
+.level-low{background:rgba(244,63,94,0.12);color:#fb7185;border:1px solid rgba(244,63,94,0.2)}
+.level-critical{background:rgba(244,63,94,0.2);color:#fb7185;border:1px solid rgba(244,63,94,0.3);animation:pulse-glow 2s infinite}
+
+/* At-risk row highlight */
+.row-at-risk{background:rgba(244,63,94,0.04)!important}
+.row-at-risk:hover{background:rgba(244,63,94,0.08)!important}

@@ -1,0 +1,23 @@
+.stat-card{background:rgba(17,24,39,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:1.5rem;transition:all 250ms;animation:fadeIn 0.5s ease-out both;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;opacity:0;transition:opacity 250ms}
+.stat-card:hover{border-color:rgba(99,102,241,0.3);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+.stat-card:hover::before{opacity:1}
+.stat-indigo::before{background:linear-gradient(90deg,#6366f1,#a855f7)}
+.stat-blue::before{background:linear-gradient(90deg,#3b82f6,#06b6d4)}
+.stat-emerald::before{background:linear-gradient(90deg,#10b981,#06b6d4)}
+.stat-amber::before{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.stat-rose::before{background:linear-gradient(90deg,#f43f5e,#ec4899)}
+.stat-purple::before{background:linear-gradient(90deg,#a855f7,#6366f1)}
+.stat-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+.stat-title{font-size:0.8rem;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em}
+.stat-icon-wrap{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0}
+.bg-indigo{background:linear-gradient(135deg,#6366f1,#a855f7)}
+.bg-blue{background:linear-gradient(135deg,#3b82f6,#06b6d4)}
+.bg-emerald{background:linear-gradient(135deg,#10b981,#06b6d4)}
+.bg-amber{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+.bg-rose{background:linear-gradient(135deg,#f43f5e,#ec4899)}
+.bg-purple{background:linear-gradient(135deg,#a855f7,#6366f1)}
+.stat-value{font-size:2rem;font-weight:800;letter-spacing:-0.03em;color:var(--text-primary)}
+.stat-trend{font-size:0.78rem;font-weight:600;margin-top:0.5rem}
+.stat-trend.up{color:#34d399}
+.stat-trend.down{color:#fb7185}

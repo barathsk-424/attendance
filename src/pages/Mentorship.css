@@ -1,0 +1,119 @@
+/* ─── Mentorship Page ───────────────────────────────────────── */
+.mentorship-page { padding: 0; }
+
+.mentorship-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 28px; }
+
+/* Subject Filter Tabs */
+.subject-tabs {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+}
+.subject-tab {
+  padding: 8px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03); color: #94a3b8; font-size: 0.84rem;
+  font-weight: 500; cursor: pointer; transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+}
+.subject-tab:hover { border-color: rgba(99,102,241,0.3); color: #cbd5e1; }
+.subject-tab.active {
+  background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.15));
+  border-color: rgba(99,102,241,0.4); color: #a5b4fc; font-weight: 600;
+}
+
+/* Pairing Cards */
+.pairings-grid {
+  display: flex; flex-direction: column; gap: 16px;
+}
+.pairing-card {
+  background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9));
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 20px;
+  padding: 24px; position: relative; overflow: hidden;
+  animation: pairFadeIn 0.5s ease both;
+}
+.pairing-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, #10b981, #6366f1, #f59e0b);
+}
+@keyframes pairFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pairing-subject-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(99,102,241,0.12); color: #a5b4fc;
+  padding: 4px 14px; border-radius: 20px; font-size: 0.78rem;
+  font-weight: 600; margin-bottom: 16px;
+}
+
+.pairing-row {
+  display: flex; align-items: center; gap: 16px;
+}
+
+/* Mentor / Mentee Cards */
+.pair-person {
+  flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px; padding: 18px; display: flex; align-items: center; gap: 14px;
+  transition: all 0.3s;
+}
+.pair-person:hover { border-color: rgba(255,255,255,0.12); }
+.pair-person.mentor { border-left: 3px solid #10b981; }
+.pair-person.mentee { border-left: 3px solid #f59e0b; }
+
+.pair-avatar {
+  width: 46px; height: 46px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 700; color: white; flex-shrink: 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+.pair-info { flex: 1; min-width: 0; }
+.pair-name { font-size: 0.92rem; font-weight: 600; color: #f1f5f9; margin-bottom: 2px; }
+.pair-roll { font-size: 0.76rem; color: #64748b; }
+.pair-score {
+  text-align: right;
+}
+.pair-score-value { font-size: 1.1rem; font-weight: 700; display: block; }
+.pair-score-value.high { color: #10b981; }
+.pair-score-value.low { color: #f59e0b; }
+.pair-score-label { font-size: 0.68rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Arrow Connector */
+.pair-connector {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 0 8px; flex-shrink: 0;
+}
+.connector-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1));
+  border: 1px solid rgba(99,102,241,0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: #a5b4fc;
+}
+.connector-label { font-size: 0.65rem; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Role Tags */
+.role-tag {
+  display: inline-block; padding: 3px 10px; border-radius: 8px;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.role-tag.mentor-tag { background: rgba(16,185,129,0.12); color: #34d399; }
+.role-tag.mentee-tag { background: rgba(245,158,11,0.12); color: #fbbf24; }
+
+/* Improvement Indicator */
+.improvement-hint {
+  font-size: 0.78rem; color: #64748b; margin-top: 12px;
+  padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04);
+  display: flex; align-items: center; gap: 8px;
+}
+.improvement-hint svg { color: #6366f1; }
+
+/* Empty state */
+.mentorship-empty {
+  text-align: center; padding: 60px 20px; color: #475569;
+}
+.mentorship-empty svg { margin-bottom: 12px; opacity: 0.4; }
+
+@media (max-width: 768px) {
+  .pairing-row { flex-direction: column; }
+  .pair-connector { transform: rotate(90deg); padding: 8px 0; }
+}

@@ -1,0 +1,10 @@
+.attendance-page{animation:fadeIn 0.4s ease-out}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.section-header h3{font-size:1.1rem;font-weight:700}
+.date-input{padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:var(--text-primary);font-family:'Inter',sans-serif;font-size:0.8rem}
+.date-input::-webkit-calendar-picker-indicator{filter:invert(0.7)}
+.table-section{margin-top:1.5rem}
+.status-badge{display:inline-flex;padding:3px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;text-transform:capitalize}
+.status-present{background:rgba(16,185,129,0.15);color:#34d399}
+.status-absent{background:rgba(244,63,94,0.15);color:#fb7185}
+.status-late{background:rgba(245,158,11,0.15);color:#fbbf24}

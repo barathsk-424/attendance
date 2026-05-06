@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-
 const supabaseUrl = 'https://sydimjscinoppzwtquqi.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN5ZGltanNjaW5vcHB6d3RxdXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTE3NDEsImV4cCI6MjA5MjkyNzc0MX0.ehjT9-fgJj8qnSr9Hj4VS5hoCPOMKAFkLSt6vbU6hdw';
 

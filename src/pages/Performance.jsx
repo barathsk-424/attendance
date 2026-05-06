@@ -2,22 +2,32 @@ import { useState, useEffect } from 'react'
 import { TrendingUp, Award, BarChart3, Target } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from 'recharts'
 import supabase from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 import StatCard from '../components/StatCard'
 import './Performance.css'
 
 export default function Performance() {
+  const { user, isStudent } = useAuth()
   const [results, setResults] = useState([])
   const [subjectAvgs, setSubjectAvgs] = useState([])
   const [classAvgs, setClassAvgs] = useState([])
   const [stats, setStats] = useState({ avg: 0, top: 0, pass: 0, fail: 0 })
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => { fetchData() }, [])
+  useEffect(() => { fetchData() }, [user])
 
   async function fetchData() {
+    let semQuery = supabase.from('semester_results').select('*, students(full_name, roll_number), classes:class_id(name)')
+    let marksQuery = supabase.from('semester_subject_marks').select('marks_obtained, max_marks, subjects(name), semester_results!inner(classes:class_id(name))')
+
+    if (isStudent && user?.student?.id) {
+      semQuery = semQuery.eq('student_id', user.student.id)
+      marksQuery = marksQuery.eq('semester_results.student_id', user.student.id)
+    }
+
     const [semRes, marksRes] = await Promise.all([
-      supabase.from('semester_results').select('*, students(full_name, roll_number), classes:class_id(name)').order('percentage', { ascending: false }),
-      supabase.from('semester_subject_marks').select('marks_obtained, max_marks, subjects(name), semester_results!inner(classes:class_id(name))')
+      semQuery.order('percentage', { ascending: false }),
+      marksQuery
     ])
 
     const sem = semRes.data || []

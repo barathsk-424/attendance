@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, User, BookOpen, CalendarCheck, AlertTriangle, TrendingUp, Target } from 'lucide-react'
+import { ArrowLeft, User, BookOpen, CalendarCheck, AlertTriangle, TrendingUp, Target, HeartHandshake } from 'lucide-react'
 import supabase from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 import './StudentDetail.css'
 
 function scoreColor(p) { return p >= 80 ? '#10b981' : p >= 60 ? '#3b82f6' : p >= 40 ? '#f59e0b' : '#f43f5e' }
@@ -17,27 +18,45 @@ function predictOutcome(percentage, attRate, subjectMarks) {
   return { score, label, cls }
 }
 
-export default function StudentDetail() {
-  const { studentId } = useParams()
+export default function StudentDetail({ isSelf = false }) {
+  const { studentId: paramId } = useParams()
+  const { user, isStudent } = useAuth()
   const navigate = useNavigate()
   const [student, setStudent] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => { fetchStudent() }, [studentId])
+  const studentId = isSelf ? user?.student?.id : paramId
+
+  useEffect(() => { 
+    if (isStudent && !isSelf && paramId !== user?.student?.id) {
+      navigate('/student-dashboard')
+      return
+    }
+    if (studentId) fetchStudent() 
+  }, [studentId, isSelf])
 
   async function fetchStudent() {
-    const { data } = await supabase.from('students').select(`
-      *, institution:institutions(name),
-      student_enrollments(class:classes(name, grade_level, section)),
-      semester_results(
-        percentage, grade, semester, result_status, total_marks, academic_year,
-        semester_subject_marks(marks_obtained, max_marks, subjects(name))
-      ),
-      attendance(status),
-      alerts(alert_type, message, severity, is_read, created_at)
-    `).eq('id', studentId).single()
-    setStudent(data)
-    setLoading(false)
+    if (!studentId) return
+    setLoading(true)
+    try {
+      const { data, error } = await supabase.from('students').select(`
+        *, institution:institutions(name),
+        student_enrollments(class:classes(name, grade_level, section)),
+        semester_results(
+          percentage, grade, semester, result_status, total_marks, academic_year,
+          semester_subject_marks(marks_obtained, max_marks, subjects(name))
+        ),
+        attendance(status),
+        alerts(alert_type, message, severity, is_read, created_at)
+      `).eq('id', studentId).maybeSingle()
+      
+      if (error) throw error
+      setStudent(data)
+    } catch (err) {
+      console.error('Error fetching student details:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (loading) return <div className="loading-state"><div className="spinner" /><p>Loading student...</p></div>
@@ -59,10 +78,12 @@ export default function StudentDetail() {
     <div className="student-detail">
       <div className="page-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button onClick={() => navigate(-1)} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '8px 12px', cursor: 'pointer', color: '#94a3b8' }}>
-            <ArrowLeft size={18} />
-          </button>
-          <div><h1>Student Profile</h1><p className="page-subtitle">Performance tracking & analytics</p></div>
+          {!isSelf && (
+            <button onClick={() => navigate(-1)} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '8px 12px', cursor: 'pointer', color: '#94a3b8' }}>
+              <ArrowLeft size={18} />
+            </button>
+          )}
+          <div><h1>{isSelf ? 'My Dashboard' : 'Student Profile'}</h1><p className="page-subtitle">Performance tracking & analytics</p></div>
         </div>
       </div>
 

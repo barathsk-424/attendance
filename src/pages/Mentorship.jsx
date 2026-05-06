@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Users, ArrowRight, Lightbulb, Award, TrendingDown, BookOpen } from 'lucide-react'
 import supabase from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 import StatCard from '../components/StatCard'
 import './Mentorship.css'
 
@@ -11,13 +12,14 @@ const GRADIENTS = [
 ]
 
 export default function Mentorship() {
+  const { user, isStudent } = useAuth()
   const [pairings, setPairings] = useState([])
   const [subjects, setSubjects] = useState([])
   const [activeSubject, setActiveSubject] = useState('all')
   const [stats, setStats] = useState({ mentors: 0, mentees: 0, pairs: 0, subjects: 0 })
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => { fetchAndPair() }, [])
+  useEffect(() => { fetchAndPair() }, [user])
 
   async function fetchAndPair() {
     // Fetch all subject marks with student info
@@ -94,9 +96,13 @@ export default function Mentorship() {
     setLoading(false)
   }
 
-  const filtered = activeSubject === 'all'
+  let filtered = activeSubject === 'all'
     ? pairings
     : pairings.filter(p => p.subject === activeSubject)
+
+  if (isStudent && user?.student?.id) {
+    filtered = filtered.filter(p => p.mentor.id === user.student.id || p.mentee.id === user.student.id)
+  }
 
   if (loading) return <div className="loading-state"><div className="spinner" /><p>Analyzing performance data...</p></div>
 
@@ -109,12 +115,14 @@ export default function Mentorship() {
         </div>
       </div>
 
-      <div className="mentorship-stats">
-        <StatCard title="Mentors Identified" value={stats.mentors} icon={Award} color="emerald" trend="High performers" trendUp />
-        <StatCard title="Students Need Help" value={stats.mentees} icon={TrendingDown} color="amber" trend="Below threshold" />
-        <StatCard title="Pairings Generated" value={stats.pairs} icon={Users} color="indigo" trend="Active matches" trendUp />
-        <StatCard title="Subjects Analyzed" value={stats.subjects} icon={BookOpen} color="blue" />
-      </div>
+      {!isStudent && (
+        <div className="mentorship-stats">
+          <StatCard title="Mentors Identified" value={stats.mentors} icon={Award} color="emerald" trend="High performers" trendUp />
+          <StatCard title="Students Need Help" value={stats.mentees} icon={TrendingDown} color="amber" trend="Below threshold" />
+          <StatCard title="Pairings Generated" value={stats.pairs} icon={Users} color="indigo" trend="Active matches" trendUp />
+          <StatCard title="Subjects Analyzed" value={stats.subjects} icon={BookOpen} color="blue" />
+        </div>
+      )}
 
       <div className="subject-tabs">
         {subjects.map(s => (

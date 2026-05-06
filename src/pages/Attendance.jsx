@@ -2,22 +2,30 @@ import { useState, useEffect } from 'react'
 import { CalendarCheck, Users, Clock, XCircle } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import supabase from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 import StatCard from '../components/StatCard'
 import './Attendance.css'
 
 export default function Attendance() {
+  const { user, isStudent } = useAuth()
   const [records, setRecords] = useState([])
   const [stats, setStats] = useState({ present: 0, absent: 0, late: 0, rate: 0 })
   const [classData, setClassData] = useState([])
   const [dateFilter, setDateFilter] = useState('')
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => { fetchData() }, [])
+  useEffect(() => { fetchData() }, [user])
 
   async function fetchData() {
-    const { data } = await supabase.from('attendance').select(`
+    let query = supabase.from('attendance').select(`
       *, students(full_name, roll_number), classes:class_id(name)
-    `).order('date', { ascending: false }).limit(200)
+    `)
+
+    if (isStudent && user?.student?.id) {
+      query = query.eq('student_id', user.student.id)
+    }
+
+    const { data } = await query.order('date', { ascending: false }).limit(200)
 
     const all = data || []
     setRecords(all)

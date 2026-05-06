@@ -206,7 +206,19 @@ function CSVUpload({ onSuccess, onRefresh }) {
     if (!file || !preview.length) return
     setUploading(true)
 
-    if (type === 'marks') {
+    if (type === 'students') {
+      for (const row of preview) {
+        if (!row.full_name || !row.roll_number) continue
+        await supabase.from('students').insert({
+          full_name: row.full_name,
+          roll_number: row.roll_number,
+          email: row.email,
+          phone: row.phone,
+          admission_year: parseInt(row.admission_year || new Date().getFullYear())
+        })
+      }
+      onSuccess(`Uploaded ${preview.length} student records from CSV!`)
+    } else if (type === 'marks') {
       for (const row of preview) {
         if (!row.roll_number || !row.subject || !row.marks) continue
         const { data: student } = await supabase.from('students').select('id').eq('roll_number', row.roll_number).single()
@@ -238,6 +250,7 @@ function CSVUpload({ onSuccess, onRefresh }) {
       <div className="form-grid" style={{ marginBottom: 16 }}>
         <div className="form-field"><label>Upload Type</label>
           <select value={type} onChange={e => setType(e.target.value)}>
+            <option value="students">Students (full_name, roll_number, email, phone, admission_year)</option>
             <option value="marks">Marks (roll_number, subject, marks, max_marks)</option>
             <option value="attendance">Attendance (roll_number, date, status)</option>
           </select>
@@ -250,7 +263,7 @@ function CSVUpload({ onSuccess, onRefresh }) {
         onDrop={e => { e.preventDefault(); e.currentTarget.classList.remove('dragging'); handleFile(e.dataTransfer.files[0]) }}>
         <div className="upload-icon"><FileText size={24} /></div>
         <h4>Drop CSV file here or click to browse</h4>
-        <p>{type === 'marks' ? 'Columns: roll_number, subject, marks, max_marks' : 'Columns: roll_number, date, status'}</p>
+        <p>{type === 'students' ? 'Columns: full_name, roll_number, email, phone, admission_year' : type === 'marks' ? 'Columns: roll_number, subject, marks, max_marks' : 'Columns: roll_number, date, status'}</p>
         {file && <div className="upload-file-name">📄 {file.name}</div>}
       </div>
       <input ref={fileRef} type="file" accept=".csv" hidden onChange={e => handleFile(e.target.files[0])} />

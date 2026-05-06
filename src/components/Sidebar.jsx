@@ -1,5 +1,5 @@
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Users, CalendarCheck, TrendingUp, Bell, GraduationCap, Menu, X, Brain, LogOut, BookOpen, HeartHandshake, ClipboardEdit } from 'lucide-react'
+import { LayoutDashboard, Users, CalendarCheck, TrendingUp, Bell, GraduationCap, Menu, X, Brain, LogOut, BookOpen, HeartHandshake, ClipboardEdit, Award } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import './Sidebar.css'
@@ -27,12 +27,22 @@ const teacherNav = [
   { path: '/alerts', label: 'Alerts', icon: Bell },
 ]
 
+const studentNav = [
+  { path: '/student-dashboard', label: 'Student Details', icon: LayoutDashboard },
+  { path: '/attendance', label: 'Attendance', icon: CalendarCheck },
+  { path: '/performance', label: 'Marks', icon: Award },
+  { path: '/performance', label: 'Performance', icon: TrendingUp },
+  { path: '/predictions', label: 'Prediction', icon: Brain },
+  { path: '/mentorship', label: 'Mentorship', icon: HeartHandshake },
+  { path: '/alerts', label: 'Alerts', icon: Bell },
+]
+
 export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { user, logout, isAdmin } = useAuth()
+  const { user, logout, isAdmin, isTeacher, isStudent } = useAuth()
   const navigate = useNavigate()
 
-  const navItems = isAdmin ? adminNav : teacherNav
+  const navItems = isAdmin ? adminNav : isTeacher ? teacherNav : studentNav
   const initials = user?.name?.split(' ').map(w => w[0]).join('').slice(0, 2) || '?'
 
   function handleLogout() {
@@ -71,8 +81,8 @@ export default function Sidebar() {
           <div className="user-card">
             <div className="user-avatar">{initials}</div>
             <div className="user-info">
-              <span className="user-name">{user?.name || 'User'}</span>
-              <span className="user-role">{isAdmin ? 'Admin' : 'Teacher'}</span>
+              <span className="user-name">{user?.name || user?.full_name || 'User'}</span>
+              <span className="user-role">{isAdmin ? 'Admin' : isTeacher ? 'Teacher' : 'Student'}</span>
             </div>
           </div>
           <button className="logout-btn" onClick={handleLogout} title="Sign out">

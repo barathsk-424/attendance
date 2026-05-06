@@ -14,3 +14,38 @@
 /* At-risk row highlight */
 .row-at-risk{background:rgba(244,63,94,0.04)!important}
 .row-at-risk:hover{background:rgba(244,63,94,0.08)!important}
+
+/* Prediction Focus for Students */
+.prediction-focus-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.status-badge.big {
+  font-size: 1.5rem;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.confidence-label {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.prediction-advice {
+  max-width: 500px;
+  color: #f8fafc;
+  line-height: 1.6;
+  font-size: 1.05rem;
+}

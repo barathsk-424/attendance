@@ -1,17 +1,25 @@
 import { useState, useEffect } from 'react'
 import { Bell, AlertTriangle, TrendingDown, Trophy, CheckCircle } from 'lucide-react'
 import supabase from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 import './Alerts.css'
 
 export default function Alerts() {
+  const { user, isStudent } = useAuth()
   const [alerts, setAlerts] = useState([])
   const [filter, setFilter] = useState('all')
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => { fetchAlerts() }, [])
+  useEffect(() => { fetchAlerts() }, [user])
 
   async function fetchAlerts() {
-    const { data } = await supabase.from('alerts').select('*, students(full_name, roll_number)').order('created_at', { ascending: false })
+    let query = supabase.from('alerts').select('*, students(full_name, roll_number)')
+    
+    if (isStudent && user?.student?.id) {
+      query = query.eq('student_id', user.student.id)
+    }
+
+    const { data } = await query.order('created_at', { ascending: false })
     setAlerts(data || [])
     setLoading(false)
   }
